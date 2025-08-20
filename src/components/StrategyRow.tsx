@@ -41,8 +41,6 @@ export function StrategyRow({
     const displayedRedTendency = useGale ? blackTendency : redTendency;
     const displayedBlackTendency = useGale ? redTendency : blackTendency;
 
-    
-
     return (
         <div
             className={`grid grid-cols-5 gap-4 items-center py-5 px-6 border-b border-border hover:bg-card/70 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 ${getDelayClass(
