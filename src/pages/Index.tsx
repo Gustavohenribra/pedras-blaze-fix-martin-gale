@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { StrategyRow } from "@/components/StrategyRow";
 import { TabSelector } from "@/components/TabSelector";
 import { ColorPatterns } from "@/components/ColorPatterns";
@@ -15,6 +15,8 @@ interface StoneStats {
     redTendency: number;
     blackTendency: number;
     dominantColor: "red" | "black";
+    galeRedSuccess: number;
+    galeBlackSuccess: number;
 }
 
 interface ColorStats {
@@ -34,7 +36,7 @@ const Index = () => {
     const [isUpdating, setIsUpdating] = useState(false);
     const [nextUpdateIn, setNextUpdateIn] = useState(30);
 
-    const loadStats = async () => {
+    const loadStats = useCallback(async () => {
         if (isUpdating) {
             console.log("Atualização já em andamento, aguardando...");
             return;
@@ -61,7 +63,7 @@ const Index = () => {
             setLoading(false);
             setIsUpdating(false);
         }
-    };
+    }, [isUpdating]);
 
     useEffect(() => {
         loadStats();
@@ -83,7 +85,7 @@ const Index = () => {
             clearInterval(updateInterval);
             clearInterval(countdownInterval);
         };
-    }, []);
+    }, [loadStats]);
 
     return (
         <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
@@ -205,6 +207,10 @@ const Index = () => {
                                         dominantColor={stats.dominantColor}
                                         index={index}
                                         useGale={useGale}
+                                        galeRedSuccess={stats.galeRedSuccess}
+                                        galeBlackSuccess={
+                                            stats.galeBlackSuccess
+                                        }
                                     />
                                 ))
                             )}

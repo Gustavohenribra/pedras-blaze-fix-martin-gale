@@ -11,6 +11,8 @@ interface StrategyRowProps {
     dominantColor: "red" | "black";
     index: number;
     useGale: boolean;
+    galeRedSuccess: number; 
+    galeBlackSuccess: number;
 }
 
 export function StrategyRow({
@@ -22,6 +24,8 @@ export function StrategyRow({
     dominantColor,
     index,
     useGale,
+    galeRedSuccess,
+    galeBlackSuccess,
 }: StrategyRowProps) {
     const getDelayClass = (index: number) => {
         return `animate-slide-in-left`;
@@ -35,11 +39,10 @@ export function StrategyRow({
 
     const odds = calculateOdds(percentage);
 
-    const galeColor = dominantColor === "red" ? "black" : "red";
-    const finalDominantColor = useGale ? galeColor : dominantColor;
+    const finalDominantColor = dominantColor; 
 
-    const displayedRedTendency = useGale ? blackTendency : redTendency;
-    const displayedBlackTendency = useGale ? redTendency : blackTendency;
+    const displayedRedTendency = useGale ? galeRedSuccess : redTendency;
+    const displayedBlackTendency = useGale ? galeBlackSuccess : blackTendency;
 
     return (
         <div
@@ -98,7 +101,13 @@ export function StrategyRow({
                         </div>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                        Puxando {finalDominantColor === "red" ? "🔴" : "⚫"}
+                        {useGale
+                            ? `G1 - ${
+                                  finalDominantColor === "red" ? "🔴" : "⚫"
+                              }`
+                            : `Puxando ${
+                                  finalDominantColor === "red" ? "🔴" : "⚫"
+                              }`}
                     </span>
                 </div>
             </div>
