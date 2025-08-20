@@ -12,7 +12,7 @@ interface StoneStats {
     redTendency: number;
     blackTendency: number;
     dominantColor: "red" | "black";
-    galeRedSuccess: number; 
+    galeRedSuccess: number;
     galeBlackSuccess: number;
 }
 
@@ -229,6 +229,7 @@ export class BlazeService {
             let redCount = 0;
             let blackCount = 0;
 
+            // Contadores para Martin Gale G1 - LÓGICA CORRETA
             let galeRedSuccessCount = 0;
             let galeBlackSuccessCount = 0;
             let galeRedTotalBets = 0;
@@ -239,28 +240,35 @@ export class BlazeService {
                     (h) => h.id === occurrence.id
                 );
 
+                // LÓGICA PARA "SEM GALE" (somente 1ª rodada)
                 if (currentIndex > 0 && currentIndex < history.length - 1) {
                     const nextEntry = history[currentIndex - 1];
                     if (nextEntry.color === "red") redCount++;
                     else if (nextEntry.color === "black") blackCount++;
                 }
 
+                // LÓGICA PARA "G1" (1ª OU 2ª rodada)
                 if (currentIndex > 1) {
-                    const next1 = history[currentIndex - 1];
-                    const next2 =
-                        currentIndex > 1 ? history[currentIndex - 2] : null;
+                    const next1 = history[currentIndex - 1]; // 1ª rodada após pedra
+                    const next2 = history[currentIndex - 2]; // 2ª rodada após pedra
 
+                    // VERMELHO G1
                     galeRedTotalBets++;
                     if (next1?.color === "red") {
+                        // Ganhou na 1ª rodada - conta para G1
                         galeRedSuccessCount++;
                     } else if (next2?.color === "red") {
+                        // Perdeu na 1ª, ganhou na 2ª - conta APENAS para G1
                         galeRedSuccessCount++;
                     }
 
+                    // PRETO G1
                     galeBlackTotalBets++;
                     if (next1?.color === "black") {
+                        // Ganhou na 1ª rodada - conta para G1
                         galeBlackSuccessCount++;
                     } else if (next2?.color === "black") {
+                        // Perdeu na 1ª, ganhou na 2ª - conta APENAS para G1
                         galeBlackSuccessCount++;
                     }
                 }
